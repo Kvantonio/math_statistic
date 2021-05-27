@@ -1,0 +1,204 @@
+{% extends "main.html" %}
+
+{% block content %}
+	<style>
+		h1 {
+			text-align: center;
+		}
+		fieldset {
+			width: 70%;
+			margin: 20px auto;
+			padding: 20px;
+		}
+		legend {
+			text-align: center;
+			font-size: 40px;
+		}
+		#table {
+		  font-family: Arial, Helvetica, sans-serif;
+		  border-collapse: collapse;
+		  width: 100%;
+		  margin-top: 20px;
+		}
+
+		#table td, #table th {
+		  border: 1px solid #ddd;
+		  padding: 8px;
+
+		}
+
+		#table tr:nth-child(even){background-color: #f2f2f2;}
+
+		#table tr:hover {background-color: #ddd;}
+
+		#table th {
+			text-align: center;
+		  padding-top: 12px;
+		  padding-bottom: 12px;
+		  text-align: left;
+		  background-color: grey;
+		  color: white;
+		}
+		th {
+			text-align: center;
+		}
+		td {
+			text-align: center;
+		}
+		h2 {
+			margin-top: 20px; 
+		}
+	</style>
+	<fieldset>
+		<legend>The analysis of variance</legend>
+		<form action="" method="post">
+				<span>
+					<span>Selcet the level of significance</span>
+					<select class="form_select" name="op">
+						<option value="1">0.01</option>
+				        <option value="2">0.05</option>
+					</select>
+				</span>
+				<span>
+				    <input type="submit" value="Calculate">
+				</span>
+
+		</form>
+		{% if data %}
+			<table id ='table'>
+				<tr>
+					<th rowspan="2">Factor B</th>
+					<th colspan="3"> Factor A</th>
+				</tr>	
+				<tr>
+
+					<th>A1</th>
+					<th>A2</th>
+					<th>A3</th>
+				</tr>
+				<tr>
+					<td>B1</td>
+					<td>
+						{% for i in data[0]%}
+							{{ i }},
+						{% endfor %}
+					</td>
+					<td>
+						{% for i in data[1]%}
+							{{ i }},
+						{% endfor %}
+					</td>
+					<td>
+						{% for i in data[2]%}
+							{{ i }},
+						{% endfor %}
+					</td>
+
+				</tr>
+				<tr>
+					<td>B2</td>
+					<td>
+						{% for i in data[3]%}
+							{{ i }},
+						{% endfor %}
+					</td>
+					<td>	
+						{% for i in data[4]%}
+							{{ i }},
+						{% endfor %}
+					</td>
+					<td>
+						{% for i in data[5]%}
+							{{ i }},
+						{% endfor %}
+					</td>
+
+				</tr>
+			</table>
+		{% endif %}
+		<div style="margin-top: 20px;">At the significance level a = 0.05 or 0.01 to determine the influence of factors A and B and
+			  their combined effect on the studied trait.</div>
+		<h2>Table 1</h2>
+		<div style="margin-top: 20px;">Block average(table 1).</div>
+		<table id ="table">
+			<tr>
+				<th style="text-decoration: overline;">x</th>
+			</tr>
+				{% for i in xi %}
+				<tr>
+					<td>{{ i }}</td>
+				</tr>	
+				{% endfor %}
+
+				<caption style="font-style: italic;">Table 1</caption>
+		</table>
+		<h2>Table 2</h2>
+		<div style="margin-top: 20px;">The average value per line(table 2).</div>
+		<table id ="table">
+			<tr>
+				<th style="text-decoration: overline;">y</th>
+			</tr>
+				{% for i in y %}
+				<tr>
+					<td>{{ i }}</td>
+				</tr>	
+				{% endfor %}
+
+				<caption style="font-style: italic;">Table 2</caption>
+		</table>
+		<h2>Table 3</h2>
+		<div style="margin-top: 20px;">The average value for the columns(table 3).</div>
+		<table id ="table">
+			<tr>
+				<th style="text-decoration: overline;">z</th>
+			</tr>
+				{% for i in z_arr %}
+				<tr>
+					<td>{{ i }}</td>
+				</tr>	
+				{% endfor %}
+
+				<caption style="font-style: italic;">Table 3</caption>
+		</table>
+		<div style="margin-top: 20px; font-style: italic;">The general average - {{ x_result }}</div>
+		<h2>Table 4<h2>
+		<table id ="table">
+			<tr>
+				<th>A source that encourages scattering</th>
+				<th>The sum of the squares of the deviations</th>
+				<th>Number of degrees of freedom</th>
+				<th>Statistical estimates of variance</th>
+			</tr>
+			<tr>
+				<td>Factor A</td>
+				<td>{{ q[0] }}</td>
+				<td>p - 1 = 2</td>
+				<td>{{ s[0] }}</td>
+			</tr>
+			<tr>
+				<td>Factor B</td>
+				<td>{{ q[1] }}</td>
+				<td>q - 1 = 1</td>
+				<td>{{ s[1] }}</td>
+			</tr>	
+			<tr>
+				<td>Simultaneous influence of factors A and B</td>
+				<td>{{ q[2] }}</td>
+				<td>(p-1)(q-1) = 2</td>
+				<td>{{ s[2] }}</td>
+			</tr>
+			<tr>
+				<td>Influence of random factors</td>
+				<td>{{ q[3] }}</td>
+				<td>N - pq = 54</td>
+				<td>{{ s[3] }}</td>
+			</tr>
+			<tr>
+				<td>Total variance</td>
+				<td>{{ q[4] }}</td>
+				<td>N - 1 = 59</td>
+				<td>{{ s[4] }}</td>
+			</tr>
+		</table>
+	</fieldset>
+{% endblock %}
